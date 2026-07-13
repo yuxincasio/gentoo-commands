@@ -1,0 +1,108 @@
+# ping google.com
+# cfdisk /dev/sda
+
+create:
+/dev/sda1	1G
+/dev/sda2	4G
+/dev/sda3	95G
+
+# mkfs.ext4 /dev/sda3
+# mkfs.fat -F32 /dev/sda1
+# mkswap /dev/sda2
+
+# mount --mkdir /dev/sda3 /mnt/gentoo
+# swapon /dev/sda2
+
+#date 071315452026
+
+# cd /mnt/gentoo
+# links https://gentoo.org/downloads/mirrors
+
+# ls
+# tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo
+# vi /mnt/gentoo/etc/portage/make.conf
+
+	MAKEOPTS="-j5"
+	USE="-systemd -kde -gnome -bluetooth"
+# cp --dereference /etc/resolv.conf /mnt/gentoo/etc
+# mount --types proc /proc /mnt/gentoo/proc
+# mount --rbind /sys /mnt/gentoo/sys
+# mount --make-rslave /mnt/gentoo/sys
+# mount --rbind /dev /mnt/gentoo/dev
+# mount --make-rslave /mnt/gentoo/dev
+# mount --bind /run /mnt/gentoo/run
+# mount --make-slave /mnt/gentoo/run
+
+# chroot /mnt/gentoo /bin/bash
+% source /etc/profile
+% export PS1='(ch) $PS1'
+% mount --mkdir /dev/sda1 boot/efi
+% lsblk 
+
+% emerge-webrsync
+% emerge --sync --quiet
+% emerge --ask --quiet --verbose --update --deep --changed-use @world
+% emerge -q app-editors/vim
+% ln -sf ../usr/share/zoneinfo/Asia/Kolkata /etc/localtime
+% vim /etc/locale.gen
+% locale-gen
+% eselect locale list
+% eselect locale set 4
+% env-update && source /etc/profile %% export PS1='(ch) $PS1'
+% echo 'sys-kernel/linux-firmware @BINARY-REDISTRIBUTABLE' | tee -a /etc/portage/portage.license
+% emerge -q sys-kernel/linux-firmware
+% emerge --ask sys-firmware/sof-firmware
+% echo 'sys-kernel/installkernel dracut grub' >> /etc/portage/package.use/installkernel
+% emerge -q sys-kernel/gentoo-kernel-bin
+% vim /etc/fstab
+	/dev/sda1	/boot/efi		vfat		defaults		0 2
+	/dev/sda2	none			swap		sw			0 0
+	/dev/sda3	/			ext4		noatime			0 1
+% vim /etc/conf.d/hostname
+% vim /etc/hosts
+% emerge -q net-misc/dhcpcd
+% emerge -q --noreplace net-misc/netifrc
+% ifconfig
+% vim /etc/conf.d/net
+	config-enp0s3="dhcp"
+% cd /etc/init.d
+% ln -s neet.lo net.enp0s3
+% rc-update add net.enp0s3 default
+% passwd
+% useradd -m -G users,wheel,audio,video -s /bin/bash tony
+% passwd tony
+% emerge -q sudo
+% EDITOR=vim visudo
+% cd
+% echo 'GRUB_PLATFORMS="efi-64"' >> /etc/portage/make.conf
+% emerge -q sys-boot/grub efibootmgr
+% mount -t efivarf efivarf /sys/firmware/efi/efivars
+% grub-install --efi-directory=/boot/efi
+% grub-mkconfig -o /boot/grub/grub.cfg
+% exit
+
+# cd
+# umount -R /mnt/gentoo
+# lsblk
+# reboot
+
+login
+
+$ touch /etc/portage/package.use/xorg
+$ sudo echo 'sys-auth/panbase elogind' | sudo tee -a /etc/portage/package.use/xorg
+$ sudo echo 'media-libs/libglvnd X' | sudo tee -a /etc/portage/package.use/xorg
+$ sudo echo 'net-wireless/wpa_supplicant dbus' | sudo tee -a /etc/portage/package.use/xorg
+
+$ sudo emerge -q --ask xorg-server x11-apps/xinit x11-apps/xrandr x11-drivers/xf86-video-vesa elogind dev-vcs/git
+
+$ sudo emerge -q dwm st
+$ touch .xinitrc
+$ echo 'exec dwm' >> .xinitrc
+$ sudo emerge -q sys-apps/dbus networkmanager
+$ sudo rc-update add NetworkManager default
+
+$ sudo reboot
+$ startx
+	alt+shift+return opens terminal in dwm
+
+
