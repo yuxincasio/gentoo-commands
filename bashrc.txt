@@ -1,0 +1,28 @@
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+PS1='[\u@\h \W]\$ '
+
+# 1. Remove the existing 'ls' alias (e.g., 'ls --color=auto') to prevent conflicts
+unalias ls 2>/dev/null
+
+# 2. Define the function
+ls() {
+    # Always include --color=auto
+	local default_flags="--color=auto"
+
+	    # Check if the first argument is specifically '-al'
+		if [[ "$1" == "-al" ]]; then
+			# Execute with --group-directories-first and pass any remaining args (like directory names)
+				command ls --color=auto -al --group-directories-first "${@:2}"
+				    else
+					    # Execute with just the default flags and all original arguments
+						    command ls --color=auto "$@"
+							fi
+							}   
