@@ -1,0 +1,14 @@
+[general]
+working_directory = "/home/yourusername"
+
+[colors.primary]
+background = "#000000"
+
+[cursor]
+style = { shape = "Block", blinking = "Never" }
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "JetBrains Mono"
