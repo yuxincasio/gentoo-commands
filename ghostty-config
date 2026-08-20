@@ -1,0 +1,19 @@
+#background = #000000
+
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = no-cursor
+
+font-size = 15
+
+fullscreen = true
+
+window-padding-color = extend-always
+
+# Disable standard programming ligatures (like !=, ==, ->)
+font-feature = -calt
+
+# Disable standard and discretionary ligatures completely (optional)
+font-feature = -liga
+font-feature = -dlig
+
